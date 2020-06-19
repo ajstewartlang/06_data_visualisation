@@ -60,7 +60,7 @@ First we need to load the ggplot2 package. As it is part of the Tidyverse (and w
 library(tidyverse)
 ```
 
-In the video, I mention that using ggplot2 requires us to specify some core information. The raw data that you want to plot, gGeometries (or geoms) that are the geometric shapes that will represent the data, and the aesthetics of the geometric and statistical objects, such as color, size, shape and position.
+In the video, I mention that using ggplot2 requires us to specify some core information in order to build our visualisations. These include the raw data that you want to plot, geometries (or geoms) that are the geometric shapes that will represent the data, and the aesthetics of the geometric and objects, such as color, size, shape and position.
 
 # Your First Visualisation
 
