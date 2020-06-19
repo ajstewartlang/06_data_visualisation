@@ -43,6 +43,14 @@ If you have a Google account, you can also view and download the slides in a ran
 
 &nbsp;&nbsp;
 
+<center>
+
+[![Link to Data Visualisation slides](../images/data_vis.png){width=75%}](https://docs.google.com/presentation/d/1wyWFSdpMlQjdlSDA6i1qMdywvhXDPjOXTSHQPVYvmMo/edit?usp=sharing)
+
+</center>
+
+&nbsp;&nbsp;
+
 # The Basics of ggplot2
 
 First we need to load the ggplot2 package. As it is part of the Tidyverse (and we're likely to be using other Tidyverse packages alongside ggplot2), we load it into our library using the `library(tidyverse)` line of code.
