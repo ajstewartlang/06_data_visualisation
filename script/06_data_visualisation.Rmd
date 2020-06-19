@@ -66,7 +66,7 @@ In the video, I mention that using ggplot2 requires us to specify some core info
 
 Below is an example where we're using the `mpg` dataset (which is a dataset that contains information about cars) to build a visualisation that plots the points corresponding to city fuel economy (`cty`) on the y-axis and `manufacturer` on the x-axis.
 
-```{r, eval=FALSE}
+```{r}
 mpg %>%
   ggplot(aes(x = manufacturer, y = cty)) + 
   geom_point() 
