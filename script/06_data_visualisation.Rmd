@@ -21,6 +21,7 @@ There are a couple of great recent books focused on data visualisation that I su
 
 &nbsp;&nbsp;
 
+
 <center>
 
 [![Link to Healey book](../images/healey.jpg){width=30%}](https://socviz.co) [![Link to Healey book](../images/wilke.png){width=30%}](https://serialmentor.com/dataviz/)
@@ -63,7 +64,7 @@ In the video, I mention that using ggplot2 requires us to specify some core info
 
 # Your First Visualisation
 
-Below is an example where we're using the `mpg` dataset to build a visualisation that plots the points corresponding to city fuel economy (`cty`) on the y-axis and `manufacturer` on the x-axis.
+Below is an example where we're using the `mpg` dataset (which is a dataset that contains information about cars) to build a visualisation that plots the points corresponding to city fuel economy (`cty`) on the y-axis and `manufacturer` on the x-axis.
 
 ```{r, eval=FALSE}
 mpg %>%
@@ -71,7 +72,7 @@ mpg %>%
   geom_point() 
 ```
 
-So, this is not great. The x-axis labels are hard to read, and the indivudal points don't look that pleasing. We can use the `str_to_title()` function to change the manufacturer labels to title case, and adjust the axis labels easily using the `theme()` function. Note, the `+` symbol between the lines of `ggplot()` code is equivalent to the `%>%` operator. For historical reasons (basically, because `ggplot()` came before the other packages in the Tidyverse), you need to use the `+` when adding layers to your `ggplot()` visualisations.
+So, this is not great. The x-axis labels are hard to read, and the individual points don't look that pleasing. We can use the `str_to_title()` function to change the manufacturer labels to title case, and adjust the axis labels easily using the `theme()` function. Note, the `+` symbol between the lines of `ggplot()` code is equivalent to the `%>%` operator. For historical reasons (basically, because `ggplot()` came before the other packages in the Tidyverse), you need to use the `+` when adding layers to your `ggplot()` visualisations.
 
 ```{r}
 mpg %>%
