@@ -3,10 +3,10 @@ title: "Data Visualisation"
 author: "Andrew Stewart, Email: drandrewjstewart@gmail.com, Twitter: @ajstewart_lang"
 date: ""
 output: 
-  html_document:
-    theme: flatly
-    toc: true
-    toc_float: true
+ html_document:
+  theme: flatly
+  toc: true
+  toc_float: true
 ---
 
 ```{r setup, include=FALSE}
@@ -89,7 +89,7 @@ So let's do some more tidying - we're going to jitter the points slightly (so th
 mpg %>%
   mutate(manufacturer = str_to_title(manufacturer)) %>%
   ggplot(aes(x = manufacturer, y = cty)) + 
-  geom_jitter(width = .2, alpha = .75, size = 2) +  
+  geom_jitter(width = .2, alpha = .75, size = 2) + 
   theme_minimal() +
   theme(axis.text.x = element_text(angle = 45, vjust = 0.5, hjust = .5)) +
   theme(text = element_text(size = 13)) +
@@ -128,7 +128,7 @@ At the moment, the x-axis is ordered alphabetically. How about we order it so th
 ```{r}
 mpg %>%
   mutate(manufacturer = str_to_title(manufacturer)) %>%
-  ggplot(aes(x = fct_reorder(manufacturer, .fun = mean, cty), y = cty, colour = manufacturer)) + 
+  ggplot(aes(x = fct_reorder(manufacturer, .fun = mean, cty), y = cty, colour = manufacturer)) +
   stat_summary(fun.data = mean_cl_boot, size = 1) +
   geom_jitter(alpha = .25) +
   theme_minimal() +
@@ -176,7 +176,7 @@ mpg %>%
   geom_point(aes(colour = class)) +
   geom_smooth(se = FALSE) +
   theme(text = element_text(size = 13)) +
-  theme_minimal() +
+  theme_minimal() + 
   labs(x = "City Fuel Economy (mpg)",
        y = "Engine Displacement (litres)", 
        colour = "Vehicle Class")
@@ -219,6 +219,147 @@ mpg %>%
 
 We can see from the above visualisation that SUVs seem to have quite a lot of variability in engine size while compact cars have relatively little variability.
 
+# The NHANES Dataset
+
+We're now going to visualise aspects of the NHANES dataset.
+
+&nbsp;&nbsp;
+
+>This is survey data collected by the US National Center for Health Statistics (NCHS) which has conducted a series of health and nutrition surveys since the early 1960's. Since 1999 approximately 5,000 individuals of all ages are interviewed in their homes every year and complete the health examination component of the survey. The health examination is conducted in a mobile examination centre (MEC). The NHANES target population is "the non-institutionalized civilian resident population of the United States". NHANES, (American National Health and Nutrition Examination surveys), use complex survey designs (see http://www.cdc.gov/nchs/data/series/sr_02/sr02_162.pdf) that oversample certain subpopulations like racial minorities. Naive analysis of the original NHANES data can lead to mistaken conclusions. The percentages of people from each racial group in the data, for example, are quite different from the way they are in the population.
+
+&nbsp;&nbsp;
+
+We need to load the `NHANES` package as this is where the dataset is contained.
+
+```{r}
+library(NHANES)
+```
+
+If running the above command generated an error, is it because you haven't installed the packed on your machine with `install.packages("NHANES")`?
+
+First we're going to explore the NHANES dataset.
+
+```{r}
+ncol(NHANES)
+nrow(NHANES)
+```
+
+We see there are 76 columns and 10,000 rows. If we use the function `head()` we can see the first few rows of the dataframe.
+
+```{r}
+head(NHANES)
+```
+
+## Tidying the Data
+
+It looks like some participants appear more than once in the dataset - this could be due to the oversampling mentioned in the description - the first few rows are all for participant ID 51624. We can use the `select()` function alongwith the `n_distinct()` function to tell us the unique number of IDs in the dataset. 
+
+```{r}
+NHANES %>% 
+  select(ID) %>% 
+  n_distinct()
+```
+
+We see we have 6,779 unique individuals. Let's tidy our data to remove duplicate IDs. Note that below we're using the pipe operator `%>%` You can read it as 'and then' so it means we're taking the NHANES dataset and then filtering it keep just rows with distinct ID numbers. The pipe operator really helps with the readability of your data wrangling code and is an integral part of the tidyverse philosophy - tidy data and tidy code.
+
+```{r}
+NHANES_tidied <- NHANES %>% 
+  distinct(ID, .keep_all = TRUE)
+```
+
+```{r}
+ncol(NHANES_tidied)
+nrow(NHANES_tidied)
+```
+
+OK, so our tidied dataset is assigned to the variable NHANES_tidied and has 6,779 rows (but still 76 columns) - as we'd expect given we have 6,779 unique individuals.
+
+## Plotting a Histogram
+
+Let's start exploring the data. We have lots of potential variables and relationships to explore. I see we have one labelled `Education` which is coded as a factor. We also have information related to health such as BMI - first of all lets plot a histogram of BMI.
+
+```{r, warning=FALSE}
+NHANES_tidied %>%
+  ggplot(aes(x = BMI)) + 
+  geom_histogram(bins = 100, na.rm = TRUE)
+```
+
+We see a pretty right skewed distribution here. Note our use of the `na.rm` parameter - this parameter appears in many tidyverse functions and by setting it to TRUE we tell R to ignore any parts of our data frame where we have missing data (which is indicated by `NA`).
+
+## Summary Statistics
+
+Does BMI vary as a function of Education level? In the code below we are using the data stored in the variable `NHANES_tidied`, grouping it by Education, then summarising to generate the median BMI for each of our groups. Again, we use the `na.rm = TRUE` parameter with the `summarise()` function this time to remove any missing values (`NA`) from our calculation. 
+
+```{r, warning=FALSE, message=FALSE}
+NHANES_tidied %>% 
+  group_by(Education) %>% 
+  summarise(median = median(BMI, na.rm = TRUE))
+```
+
+So it looks like those with College eduction have the lowest median BMI (ignoring the `NA` category which corresponds to cases where we don't have Education level recorded). 
+
+## `geom_violin()`
+
+Let's graph it! Note here we're filtering out cases where we don't have BMI value recorded. The function `is.na()` returns TRUE when applied to a case of missing data (`NA`) - we use the `!` operator to negate this and combine several of these expressions together using the logical AND operator `&`. 
+
+The line of code below starting with `filter()` means filter cases where Education is not missing AND BMI is not missing. This means that the `NHANES_tidied` data that gets passed to the `ggplot()` call has no missing data for the key variables we're interested in. 
+
+I then add a `geom_violin()` layer to capture the shape of the distribution for each level of Education and `geom_boxplot()` layer to create a boxplot for each level of our Education factor - and I'm arranging the order in which they're displayed by using the `fct_reorder()` function to do the re-ordering based on the median BMI for the factor Education. 
+
+The `guides(colour = FALSE)` call suppresses displaying the colour legend - place a `#` in front of it and rerun the code to see what changes.
+
+```{r, warning=FALSE, message=FALSE}
+NHANES_tidied %>% 
+  filter(!is.na(Education) & !is.na(BMI)) %>%
+  group_by(Education) %>% 
+  ggplot(aes(x = Education, y = BMI, colour = Education)) + 
+  geom_violin() +
+  geom_jitter(alpha = .2, width = .1) +
+  geom_boxplot(alpha = .5) +
+  guides(colour = FALSE) + 
+  labs(title = "Examining the effect of education level on BMI", 
+       x = "Education Level", 
+       y = "BMI")
+```
+
+## Histograms with `facet_wrap()`
+
+We can also plot histograms of BMI separately for each Education level - we use the `facet_wrap()` function to do this.
+
+```{r, message=FALSE}
+NHANES_tidied %>% 
+  filter(!is.na(Education) & !is.na(BMI)) %>%
+  group_by(Education) %>% 
+  ggplot(aes(x = BMI, fill = Education)) +
+  geom_histogram() +
+  guides(fill = FALSE) + 
+  labs(title = "Examining the effect of education level on BMI",
+       x = "BMI", 
+       y = "Number of cases") + 
+  facet_wrap(~ Education)
+```
+
+In the above graph, notice that the same y-axis scale is used for each plot - this makes comparisons a little tricky as there are different numbers of cases for each Eduction level. Add the following `scales = "free"` after `Education` in the `facet_wrap()` line. What changes?
+
+Instead of generating the histograms using a count, we could generate them using a density function. Let's also add a density curve.
+
+```{r, warning=FALSE, message=FALSE}
+NHANES_tidied %>% 
+  filter(!is.na(Education) & !is.na(BMI)) %>%
+  group_by(Education) %>% 
+  ggplot(aes(x = BMI, fill = Education)) +
+  geom_histogram(aes(y = ..density..)) +
+  geom_density(aes(y = ..density..)) +
+  guides(fill = FALSE) + 
+  labs( title = "Examining the effect of education level on BMI", 
+        x = "BMI", 
+        y = "Density") + 
+  facet_wrap(~ Education)
+```
+
+# Your Challenge
+
+Create some new visualisations with either the `mpg` or `NHANES` datasets. There are may possible visualisations you could build with either dataset. Feel free to post your creations on our Slack channel.
 
 ## Improve this Workshop
 
