@@ -1,0 +1,217 @@
+---
+title: "Data Visualisation"
+author: "Andrew Stewart, Email: drandrewjstewart@gmail.com, Twitter: @ajstewart_lang"
+date: ""
+output: 
+  html_document:
+    theme: flatly
+    toc: true
+    toc_float: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Overview
+
+Being able to build clear visualisations is key to the successful communication of your data to your intended audience.
+
+There are a couple of great recent books focused on data visualisation that I suggest you have a look it. They provide a great historical perspective on data visualisations and are full of wonderful examples of different kinds of data visualisations, some of which you'll learn how to build in this workshop.
+
+&nbsp;&nbsp;
+
+<center>
+
+[![Link to Healey book](../images/healey.jpg){width=30%}](https://socviz.co) [![Link to Healey book](../images/wilke.png){width=30%}](https://serialmentor.com/dataviz/)
+
+</center>
+
+&nbsp;&nbsp;
+
+First I'd like you to watch this brief video where I give some examples of the kinds of data visualisations you can build in R, and why you probably want to avoid building bar graphs.
+
+&nbsp;&nbsp;
+
+[Link to YouTube talk here]
+
+&nbsp;&nbsp;
+
+&nbsp;&nbsp;
+
+If you have a Google account, you can also view and download the slides in a range of formats by clicking on the image below. If you don't have a Google account, you can download the slides in .pdf format by [clicking here](../slides/data_visualisation.pdf).
+
+&nbsp;&nbsp;
+
+# The Basics of ggplot2
+
+First we need to load the ggplot2 package. As it is part of the Tidyverse (and we're likely to be using other Tidyverse packages alongside ggplot2), we load it into our library using the `library(tidyverse)` line of code.
+
+```{r, message=FALSE}
+library(tidyverse)
+```
+
+In the video, I mention that using ggplot2 requires us to specify some core information. The raw data that you want to plot, gGeometries (or geoms) that are the geometric shapes that will represent the data, and the aesthetics of the geometric and statistical objects, such as color, size, shape and position.
+
+# Your First Visualisation
+
+Below is an example where we're using the `mpg` dataset to build a visualisation that plots the points corresponding to city fuel economy (`cty`) on the y-axis and `manufacturer` on the x-axis.
+
+```{r, eval=FALSE}
+mpg %>%
+  ggplot(aes(x = manufacturer, y = cty)) + 
+  geom_point() 
+```
+
+So, this is not great. The x-axis labels are hard to read, and the indivudal points don't look that pleasing. We can use the `str_to_title()` function to change the manufacturer labels to title case, and adjust the axis labels easily using the `theme()` function. Note, the `+` symbol between the lines of `ggplot()` code is equivalent to the `%>%` operator. For historical reasons (basically, because `ggplot()` came before the other packages in the Tidyverse), you need to use the `+` when adding layers to your `ggplot()` visualisations.
+
+```{r}
+mpg %>%
+  mutate(manufacturer = str_to_title(manufacturer)) %>%
+  ggplot(aes(x = manufacturer, y = cty)) + 
+  geom_point() +
+  theme(axis.text.x = element_text(angle = 45, vjust = 0.5, hjust = .5))
+```
+
+## Improving the Plot
+
+So let's do some more tidying - we're going to jitter the points slightly (so they're not stacked vertically) using the `geom_jitter()` function, and tidy up the axis titles using the `labs()` function to explicitly add axis labels (rather than just use the labels in our dataset). We're also adding a few other tweaks - can you spot them?
+
+```{r}
+mpg %>%
+  mutate(manufacturer = str_to_title(manufacturer)) %>%
+  ggplot(aes(x = manufacturer, y = cty)) + 
+  geom_jitter(width = .2, alpha = .75, size = 2) +  
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, vjust = 0.5, hjust = .5)) +
+  theme(text = element_text(size = 13)) +
+  labs(title = "City Fuel Economy by Car Manufacturer",
+       x = "Manufacturer", 
+       y = "City Fuel Economy (mpg)")
+```
+
+It might be helpful for us to add summary statistical information such as the mean fuel economy and confidence intervals around the mean for each car manufacturer.
+
+## Adding Summary Statistics
+
+We need to add the `Hmisc` package to allow us to use the `stat_summary()` function.
+
+```{r, message=FALSE}
+library(Hmisc)
+```
+
+```{r}
+mpg %>%
+  mutate(manufacturer = str_to_title(manufacturer)) %>%
+  ggplot(aes(x = manufacturer, y = cty)) + 
+  stat_summary(fun.data = mean_cl_boot, colour = "black", size = 1) +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, vjust = 0.5, hjust = .5)) +
+  theme(text = element_text(size = 13)) +
+  labs(title = "City Fuel Economy by Car Manufacturer",
+       x = "Manufacturer", 
+       y = "City Fuel Economy (mpg)")
+```
+
+## The Finished(?) Plot
+
+At the moment, the x-axis is ordered alphabetically. How about we order it so that it goes from manufacturer with the hightest mean fuel economy, to the lowest. Also, how about we flip the visualisation so that the axes swap and add a few other tweaks?
+
+```{r}
+mpg %>%
+  mutate(manufacturer = str_to_title(manufacturer)) %>%
+  ggplot(aes(x = fct_reorder(manufacturer, .fun = mean, cty), y = cty, colour = manufacturer)) + 
+  stat_summary(fun.data = mean_cl_boot, size = 1) +
+  geom_jitter(alpha = .25) +
+  theme_minimal() +
+  theme(text = element_text(size = 13)) +
+  labs(title = "Manufacturer by City Fuel Economy",
+       x = "Manufacturer", 
+       y = "City Fuel Economy (mpg)") +
+  guides(colour = FALSE) +
+  coord_flip()
+```
+
+This is looks pretty good. Can you tell what the other bits of code do that I added? Have a go with changing some of the numbers to see what happens. You can prevent a line of code being run by adding a `#` in front of it. So if you need to temporarily not run a line, just add a `#` rather than delete the line.
+
+Plots are rarely completely "finished" as you'll often think of a minor aesthetic tweak that might make some improvement.
+
+## Using `facet_wrap()`
+
+We might think that fuel economy varies as a function of the type of vehicle (e.g., sports cars may be more fuel hungry than midsize cars) and by the number size of engine (e.g., cars with bigger engines may be more fuel hungry). In the visualisation below we're going to use the `facet_wrap()` function to bjiuld a separate visualisation for each level of the factor we are facetting over (ignoring SUVs).
+
+```{r}
+mpg %>%
+  filter(class != "suv") %>%
+  mutate(class = str_to_title(class)) %>%
+  ggplot(aes(x = displ, y = cty, colour = class)) + 
+  geom_jitter(width = .2) +
+  theme_minimal() +
+  theme(text = element_text(size = 13)) +
+  labs(title = "City Fuel Economy by Engine Displacement",
+       x = "Engine Displacement (litres)", 
+       y = "City Fuel Economy (mpg)") +
+  guides(colour = FALSE) +
+  facet_wrap(~ class)
+```
+
+Can you tell what each of code is doing? Again, edit the numbers and put a `#` before lines you want to temporarily ignore to see what happens.
+
+# Scatterplots
+
+Above we focused on plotting a numerical variable on one axis, and a categorical variable on the other. There will be cases where we want to create scatterplots, allowing us to plot two numerical variables against each other - possibly to determine whether there might be a relationship between the two. Below we are plotting Engine Displacement on the y-axis, and City Fuel Economy on the x-axis.
+
+```{r, message=FALSE}
+mpg %>%
+  mutate(class = str_to_upper(class)) %>%
+  ggplot(aes(x = cty, y = displ)) +
+  geom_point(aes(colour = class)) +
+  geom_smooth(se = FALSE) +
+  theme(text = element_text(size = 13)) +
+  theme_minimal() +
+  labs(x = "City Fuel Economy (mpg)",
+       y = "Engine Displacement (litres)", 
+       colour = "Vehicle Class")
+```
+
+In the above example, we used the `geom_smooth()` function to add a layer corresponding to fitting a curve to our data. We can see a fairly clear negative correlation between Engine Displacement and Fuel Economhy for Fuel Economy values that are less than 25 mpg, but little relationship between the two for values that are great than 25 mpg. These seems to suggest there are some cars with relaitively small engines that have great fuel economy, and others with similar engine sizes were much worse fuel economy. 
+
+# Plotting Histograms
+
+We might want to plot a histogram of engine sizes (measured in litres and captured in the variable `displ` in the `mpg` dataset) to get a feel for how this variable is distributed.
+
+```{r}
+mpg %>%
+  ggplot(aes(x = displ)) +
+  geom_histogram(binwidth = .5, fill = "grey") +
+  labs(title = "Histogram of Engine Displacement",
+       x = "Engine Displacement (litres)",
+       y = "Count")
+```
+
+## The `ggridges` Package
+
+Given in a previous visualisation we saw that there seemed to be variability between vehicle classes, wouldn't it be great if we could compare the distributions of engine size separated by vehicle class? We're now going to use the `ggridges()` package to do just that...
+
+```{r}
+library(ggridges)
+```
+
+```{r, message=FALSE}
+mpg %>%
+  mutate(class = str_to_title(class)) %>%
+  ggplot(aes(x = displ, y = fct_reorder(class, .fun = mean, displ))) +
+  geom_density_ridges(height = .5, aes(fill = class)) +
+  theme_minimal() +
+  theme(text = element_text(size = 13)) +
+  guides(fill = FALSE) + 
+  labs(x = "Engine Displacement (litres)",
+       y = NULL)
+```
+
+We can see from the above visualisation that SUVs seem to have quite a lot of variability in engine size while compact cars have relatively little variability.
+
+
+## Improve this Workshop
+
+If you spot any issues/errors in this workshop, you can raise an issue or create a pull request for [this repo](https://github.com/ajstewartlang/06_data_visualisation). 
