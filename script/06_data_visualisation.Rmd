@@ -17,7 +17,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 Being able to build clear visualisations is key to the successful communication of your data to your intended audience.
 
-There are a couple of great recent books focused on data visualisation that I suggest you have a look it. They provide a great historical perspective on data visualisations and are full of wonderful examples of different kinds of data visualisations, some of which you'll learn how to build in this workshop.
+There are a couple of great recent books focused on data visualisation that I suggest you have a look it. They both provide great perspectives on data visualisations and are full of wonderful examples of different kinds of data visualisations, some of which you'll learn how to build in this workshop.
 
 &nbsp;&nbsp;
 
