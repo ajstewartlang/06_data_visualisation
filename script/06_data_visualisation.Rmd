@@ -141,7 +141,7 @@ mpg %>%
   coord_flip()
 ```
 
-This is looks pretty good. Can you tell what the other bits of code do that I added? Have a go with changing some of the numbers to see what happens. You can prevent a line of code being run by adding a `#` in front of it. So if you need to temporarily not run a line, just add a `#` rather than delete the line.
+This is looks pretty good. Can you tell what the other bits of code do that I added? Have a go changing some of the numbers to see what happens. You can prevent a line of code being run by adding a `#` in front of it. So if you need to temporarily not run a line, just add a `#` rather than delete the line.
 
 Plots are rarely completely "finished" as you'll often think of a minor aesthetic tweak that might make some improvement.
 
