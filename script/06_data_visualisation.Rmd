@@ -19,6 +19,8 @@ Being able to build clear visualisations is key to the successful communication 
 
 There are a couple of great recent books focused on data visualisation that I suggest you have a look it. They both provide great perspectives on data visualisations and are full of wonderful examples of different kinds of data visualisations, some of which you'll learn how to build in this workshop.
 
+If you click on the image of the Claus Wilke book, you'll be taken to the online version of the book (written in R, obviously!)
+
 &nbsp;&nbsp;
 
 
