@@ -364,6 +364,18 @@ NHANES_tidied %>%
 
 Create some new visualisations with either the `mpg` or `NHANES` datasets. There are may possible visualisations you could build with either dataset. Feel free to post your creations on our Slack channel.
 
+# Additional Resources
+
+If you are interested in understanding more about ggplot2, you might be interested in watching these two (very) detailed webinars by Thomas Lin Pedersen, one of the developers working on ggplot2 and related packages.
+
+<center>
+
+[![Link to ggplot2 video part 1](../images/ggplot2_pt1.png){width=75%}](https://youtu.be/h29g21z0a68)
+
+[![Link to ggplot2 video part 2](../images/ggplot2_pt2.png){width=75%}](https://youtu.be/0m4yywqNPVY)
+
+</center>
+
 ## Improve this Workshop
 
 If you spot any issues/errors in this workshop, you can raise an issue or create a pull request for [this repo](https://github.com/ajstewartlang/06_data_visualisation). 
