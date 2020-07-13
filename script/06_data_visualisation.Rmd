@@ -23,7 +23,6 @@ If you click on the image of the Claus Wilke book, you'll be taken to the online
 
 &nbsp;&nbsp;
 
-
 <center>
 
 [![Link to Healey book](../images/healey.jpg){width=30%}](https://socviz.co) [![Link to Healey book](../images/wilke.png){width=30%}](https://serialmentor.com/dataviz/)
@@ -36,7 +35,7 @@ First I'd like you to watch this brief video where I give some examples of the k
 
 &nbsp;&nbsp;
 
-[Link to YouTube talk here]
+<iframe width="560" height="315" src="https://youtube.com/embed/6vyMmFgfuqw" frameborder="0" allowfullscreen></iframe>
 
 &nbsp;&nbsp;
 
