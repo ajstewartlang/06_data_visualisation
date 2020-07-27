@@ -148,7 +148,7 @@ Plots are rarely completely "finished" as you'll often think of a minor aestheti
 
 ## Using `facet_wrap()`
 
-We might think that fuel economy varies as a function of the type of vehicle (e.g., sports cars may be more fuel hungry than midsize cars) and by the number size of engine (e.g., cars with bigger engines may be more fuel hungry). In the visualisation below we're going to use the `facet_wrap()` function to bjiuld a separate visualisation for each level of the factor we are facetting over (ignoring SUVs).
+We might think that fuel economy varies as a function of the type of vehicle (e.g., sports cars may be more fuel hungry than midsize cars) and by the number size of engine (e.g., cars with bigger engines may be more fuel hungry). In the visualisation below we're going to use the `facet_wrap()` function to build a separate visualisation for each level of the factor we are facetting over (ignoring SUVs).
 
 ```{r}
 mpg %>%
