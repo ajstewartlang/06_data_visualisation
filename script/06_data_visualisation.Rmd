@@ -33,21 +33,25 @@ If you click on the image of the Claus Wilke book, you'll be taken to the online
 
 First I'd like you to watch this brief video where I give some examples of the kinds of data visualisations you can build in R, and why you probably want to avoid building bar graphs.
 
+<center>
+
 &nbsp;&nbsp;
 
 <iframe width="560" height="315" src="https://youtube.com/embed/6vyMmFgfuqw" frameborder="0" allowfullscreen></iframe>
 
 &nbsp;&nbsp;
 
+</center>
+
 &nbsp;&nbsp;
 
-If you have a Google account, you can also view and download the slides in a range of formats by clicking on the image below. If you don't have a Google account, you can download the slides in .pdf format by [clicking here](../slides/data_visualisation.pdf).
+You can download the slides in .pdf format by clicking on the image below. 
 
 &nbsp;&nbsp;
 
 <center>
 
-[![Link to Data Visualisation slides](../images/data_vis.png){width=75%}](https://docs.google.com/presentation/d/1wyWFSdpMlQjdlSDA6i1qMdywvhXDPjOXTSHQPVYvmMo/edit?usp=sharing)
+[![Link to Data Visualisation slides](../images/data_vis.png){width=75%}](../slides/data_visualisation.pdf)
 
 </center>
 
