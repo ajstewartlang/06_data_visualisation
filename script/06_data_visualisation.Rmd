@@ -45,7 +45,7 @@ First I'd like you to watch this brief video where I give some examples of the k
 
 &nbsp;&nbsp;
 
-You can download the slides in .pdf format by clicking on the image below. 
+You can download the slides in .odp format by clicking [here](../slides/data_visualisation.odp) and in .pdf format by clicking on the image below. 
 
 &nbsp;&nbsp;
 
