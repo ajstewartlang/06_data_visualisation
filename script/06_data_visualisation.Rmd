@@ -317,7 +317,6 @@ The `guides(colour = FALSE)` call suppresses displaying the colour legend - plac
 ```{r, warning=FALSE, message=FALSE}
 NHANES_tidied %>% 
   filter(!is.na(Education) & !is.na(BMI)) %>%
-  group_by(Education) %>% 
   ggplot(aes(x = Education, y = BMI, colour = Education)) + 
   geom_violin() +
   geom_jitter(alpha = .2, width = .1) +
@@ -327,6 +326,26 @@ NHANES_tidied %>%
        x = "Education Level", 
        y = "BMI")
 ```
+
+## Plotting Interaction Effects
+
+We can also plot how two factors interact with each other. For the plot above, we'll now add the factor `Diabetes` (which has two levels - Yes vs. No) to see how that might interact with Education level. To capture the nature of this interaction, we use the expression `Education:Diabetes` when we specify the x-axis aesthetic. Note, I have rotated the x-axis labels 45 degrees to make them easier to read.
+
+```{r, warning=FALSE, message=FALSE}
+NHANES_tidied %>% 
+  filter(!is.na(Education) & !is.na(BMI) & !is.na(Diabetes)) %>%
+  ggplot(aes(x = Education:Diabetes, y = BMI, colour = Education)) + 
+  geom_violin() +
+  geom_jitter(alpha = .2, width = .1) +
+  geom_boxplot(alpha = .5) +
+  guides(colour = FALSE) + 
+  theme(axis.text.x = element_text(angle = 45, vjust = 0.5)) +
+  labs(title = "Examining the effect of education level and diabetes on BMI", 
+       x = "Education Level x Diabetes", 
+       y = "BMI")
+```
+
+We can see from the above plot that those with Diabetes seem to also have higher BMI scores for each level of Education.
 
 ## Histograms with `facet_wrap()`
 
