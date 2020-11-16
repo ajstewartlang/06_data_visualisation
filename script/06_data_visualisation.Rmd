@@ -384,7 +384,7 @@ NHANES_tidied %>%
 
 # Your Challenge
 
-Create some new visualisations with either the `mpg` or `NHANES` datasets. There are may possible visualisations you could build with either dataset. Feel free to post your creations on our Slack channel.
+Create some new visualisations with either the `mpg` or `NHANES` datasets. There are many possible visualisations you could build with either dataset. Feel free to post your creations on our Slack channel.
 
 # Additional Resources
 
