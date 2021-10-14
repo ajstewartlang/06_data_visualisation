@@ -37,7 +37,7 @@ First I'd like you to watch this brief video where I give some examples of the k
 
 &nbsp;&nbsp;
 
-<iframe width="560" height="315" src="https://youtube.com/embed/6vyMmFgfuqw" frameborder="0" allowfullscreen></iframe>
+<iframe width="560" height="315" src="https://youtube.com/embed/6vyMmFgfuqw" frameborder="0" data-external="1" allowfullscreen></iframe>
 
 &nbsp;&nbsp;
 
@@ -142,7 +142,7 @@ mpg %>%
   labs(title = "Manufacturer by City Fuel Economy",
        x = "Manufacturer", 
        y = "City Fuel Economy (mpg)") +
-  guides(colour = FALSE) +
+  guides(colour = 'none') +
   coord_flip()
 ```
 
@@ -165,7 +165,7 @@ mpg %>%
   labs(title = "City Fuel Economy by Engine Displacement",
        x = "Engine Displacement (litres)", 
        y = "City Fuel Economy (mpg)") +
-  guides(colour = FALSE) +
+  guides(colour = 'none') +
   facet_wrap(~ class)
 ```
 
@@ -218,7 +218,7 @@ mpg %>%
   geom_density_ridges(height = .5, aes(fill = class)) +
   theme_minimal() +
   theme(text = element_text(size = 13)) +
-  guides(fill = FALSE) + 
+  guides(fill = 'none') + 
   labs(x = "Engine Displacement (litres)",
        y = NULL)
 ```
@@ -310,9 +310,9 @@ Let's graph it! Note here we're filtering out cases where we don't have BMI valu
 
 The line of code below starting with `filter()` means filter cases where Education is not missing AND BMI is not missing. This means that the `NHANES_tidied` data that gets passed to the `ggplot()` call has no missing data for the key variables we're interested in. 
 
-I then add a `geom_violin()` layer to capture the shape of the distribution for each level of Education and `geom_boxplot()` layer to create a boxplot for each level of our Education factor - and I'm arranging the order in which they're displayed by using the `fct_reorder()` function to do the re-ordering based on the median BMI for the factor Education. 
+I then add a `geom_violin()` layer to capture the shape of the distribution for each level of Education and `geom_boxplot()` layer to create a boxplot for each level of our Education factor.
 
-The `guides(colour = FALSE)` call suppresses displaying the colour legend - place a `#` in front of it and rerun the code to see what changes.
+The `guides(colour = 'none')` call suppresses displaying the colour legend - place a `#` in front of it and rerun the code to see what changes.
 
 ```{r, warning=FALSE, message=FALSE}
 NHANES_tidied %>% 
@@ -321,7 +321,7 @@ NHANES_tidied %>%
   geom_violin() +
   geom_jitter(alpha = .2, width = .1) +
   geom_boxplot(alpha = .5) +
-  guides(colour = FALSE) + 
+  guides(colour = 'none') + 
   labs(title = "Examining the effect of education level on BMI", 
        x = "Education Level", 
        y = "BMI")
@@ -338,7 +338,7 @@ NHANES_tidied %>%
   geom_violin() +
   geom_jitter(alpha = .2, width = .1) +
   geom_boxplot(alpha = .5) +
-  guides(colour = FALSE) + 
+  guides(colour = 'none') + 
   theme(axis.text.x = element_text(angle = 45, vjust = 0.5)) +
   labs(title = "Examining the effect of education level and diabetes on BMI", 
        x = "Education Level x Diabetes", 
@@ -357,7 +357,7 @@ NHANES_tidied %>%
   group_by(Education) %>% 
   ggplot(aes(x = BMI, fill = Education)) +
   geom_histogram() +
-  guides(fill = FALSE) + 
+  guides(fill = 'none') + 
   labs(title = "Examining the effect of education level on BMI",
        x = "BMI", 
        y = "Number of cases") + 
@@ -375,7 +375,7 @@ NHANES_tidied %>%
   ggplot(aes(x = BMI, fill = Education)) +
   geom_histogram(aes(y = ..density..)) +
   geom_density(aes(y = ..density..)) +
-  guides(fill = FALSE) + 
+  guides(fill = 'none') + 
   labs( title = "Examining the effect of education level on BMI", 
         x = "BMI", 
         y = "Density") + 
